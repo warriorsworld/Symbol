@@ -15,15 +15,37 @@ export default class Symbol extends Base {
   draw(ctx, geomtry) {
     this.name = '';
     ctx.beginPath();
-    ctx.lineCap="round";
+    ctx.lineCap = 'round';
     ctx.strokeStyle = 'black';
-    ctx.lineWidth = 9;  //线宽一般设置为偶数。
+    ctx.lineWidth = 5; // 线宽一般设置为偶数。
     ctx.save();
     ctx.moveTo(...geomtry[geomtry.length - 2]);
     ctx.lineTo(...geomtry[geomtry.length - 1]);
     ctx.stroke();
-    ctx.closePath();
     ctx.restore();
+  }
+
+  drawing(ctx, geomtry) {
+    const innerGeomtry = geomtry.map(item => item);
+    this.name = '';
+    ctx.beginPath();
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 5; // 线宽一般设置为偶数。
+    ctx.save();
+    ctx.moveTo(...innerGeomtry[0]);
+
+    let timer = setInterval(() => {
+      if (innerGeomtry.length) {
+        const line = innerGeomtry.shift();
+        ctx.lineTo(...line);
+        ctx.stroke();
+        ctx.restore();
+      } else {
+        clearInterval(timer);
+      }
+    }, 10);
+    return timer;
   }
 }
 

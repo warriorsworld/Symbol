@@ -10,11 +10,13 @@
 </template>
 
 <script>
-import Symbol from '@/symbol/symbol'
+import Symbol from '@/symbol/symbol';
+import tempData from '@/temp/routeData';
 export default {
   name: 'canvasPanel',
   data() {
     return {
+      timer: null,
       mouseDown: false,
       penRoute: [],
       dom: null,
@@ -27,22 +29,27 @@ export default {
     mouseDownOnCanvas(event) {
       this.mouseDown = true;
       this.penRoute = [];
+      this.timer = this.currentSymbol.drawing(this.ctx, tempData);
     },
     mouseMoveOnCanvas(event) {
-      this.mousePoint.x = event.offsetX;
-      this.mousePoint.y = event.offsetY;
-      if (this.mouseDown) {
-        this.penRoute.push([this.mousePoint.x, this.mousePoint.y]);
-        if (this.penRoute.length > 1) {
-          this.currentSymbol.draw(this.ctx, this.penRoute);
-        }
-      }
+      // this.mousePoint.x = event.offsetX;
+      // this.mousePoint.y = event.offsetY;
+      // if (this.mouseDown) {
+      //   this.penRoute.push([this.mousePoint.x, this.mousePoint.y]);
+      //   if (this.penRoute.length > 1) {
+      //     this.currentSymbol.draw(this.ctx, this.penRoute);
+      //   }
+      // }
     },
     mouseUpOnCanvas(event) {
       this.mouseDown = false;
+      console.log(JSON.stringify(this.penRoute))
     },
     clearPanel() {
       this.ctx.clearRect(0, 0, this.dom.width, this.dom.height);
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
     }
   },
   mounted() {
